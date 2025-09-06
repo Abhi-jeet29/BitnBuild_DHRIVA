@@ -2,58 +2,40 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import '../providers/auth_provider.dart';
 import '../widgets/auth_components.dart';
+import 'signup_screen.dart';
 import 'home_screen.dart';
-import 'login_screen.dart';
 
-class SignUpScreen extends StatefulWidget {
-  final String? selectedRole;
-  
-  const SignUpScreen({
-    super.key,
-    this.selectedRole,
-  });
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
   bool _isLoading = false;
-  String _selectedRole = 'student'; // Default role
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.selectedRole != null) {
-      _selectedRole = widget.selectedRole!;
-    }
-  }
 
   @override
   void dispose() {
-    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
-  void _signUp() {
+  void _signIn() {
     if (_formKey.currentState!.validate()) {
       // TODO: Replace with actual authentication logic
-      print('Sign Up Details:');
-      print('Role: $_selectedRole');
-      print('Name: ${_nameController.text}');
+      print('Sign In Details:');
       print('Email: ${_emailController.text}');
       print('Password: ${_passwordController.text}');
       
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Account created successfully as $_selectedRole!'),
+          content: const Text('Signed in successfully!'),
           backgroundColor: Theme.of(context).colorScheme.primary,
         ),
       );
@@ -65,6 +47,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         (route) => false,
       );
     }
+  }
+
+  void _navigateToSignUp() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SignUpScreen()),
+    );
   }
 
   @override
@@ -83,7 +72,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               
               // Title
               Text(
-                'Create Account',
+                'Welcome Back',
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).colorScheme.onBackground,
@@ -91,27 +80,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Sign up as ${_selectedRole}',
+                'Sign in to continue your learning journey',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: Theme.of(context).colorScheme.onBackground.withValues(alpha: 0.7),
                 ),
               ),
               const SizedBox(height: 40),
-              
-              // Name Field
-              AuthTextField(
-                controller: _nameController,
-                labelText: 'Full Name',
-                hintText: 'Enter your full name',
-                prefixIcon: Icons.person_outline,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your full name';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
               
               // Email Field
               AuthTextField(
@@ -136,7 +110,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               AuthTextField(
                 controller: _passwordController,
                 labelText: 'Password',
-                hintText: 'Minimum 8 characters',
+                hintText: 'Enter your password',
                 prefixIcon: Icons.lock_outline,
                 obscureText: _obscurePassword,
                 suffixIcon: IconButton(
@@ -152,35 +126,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a password';
-                  }
-                  if (value.length < 8) {
-                    return 'Password must be at least 8 characters';
+                    return 'Please enter your password';
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 40),
               
-              // Sign Up Button
+              // Sign In Button
               AuthPrimaryButton(
-                text: 'Sign Up',
-                onPressed: _signUp,
+                text: 'Sign In',
+                onPressed: _signIn,
                 isLoading: _isLoading,
               ),
               
               const Spacer(),
               
-              // Login Link
+              // Sign Up Link
               AuthTextButton(
-                text: 'Already have an account?',
-                linkText: 'Log In',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  );
-                },
+                text: "Don't have an account?",
+                linkText: 'Sign Up',
+                onPressed: _navigateToSignUp,
               ),
               const SizedBox(height: 40),
             ],

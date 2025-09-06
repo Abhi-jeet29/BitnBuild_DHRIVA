@@ -37,6 +37,10 @@ dependencies:
   
   # Riverpod for state management
   flutter_riverpod: ^2.5.1
+  
+  # Firebase for authentication
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
 
 dev_dependencies:
   flutter_test:
