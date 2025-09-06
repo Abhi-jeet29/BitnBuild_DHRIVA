@@ -19,3 +19,17 @@ subprojects {
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
+buildscript {
+    ext.kotlin_version = '1.7.10' // Your version might be different
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.3.0' // Your version might be different
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // ADD THIS LINE HERE. It's the "Google services plugin"
+        classpath 'com.google.gms:google-services:4.4.3' // <-- ADD THIS LINE
+    }
+}
