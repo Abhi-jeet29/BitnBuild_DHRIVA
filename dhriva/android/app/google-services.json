@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "950438143945",
+    "project_id": "dhriva-ea92a",
+    "storage_bucket": "dhriva-ea92a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:950438143945:android:aef39c374e9aedbf94aa18",
+        "android_client_info": {
+          "package_name": "com.example.dhriva"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-fUEIiqTBpK5tJ4lO9FF2yycApwMDc0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
