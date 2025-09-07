@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../widgets/auth_components.dart';
 import 'signup_screen.dart';
 import 'home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -32,6 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
       print('Sign In Details:');
       print('Email: ${_emailController.text}');
       print('Password: ${_passwordController.text}');
+      //User? user = FirebaseAuth.instance.currentUser;
+      //print("User UID: ${user?.uid}");
       
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -39,6 +42,13 @@ class _LoginScreenState extends State<LoginScreen> {
           backgroundColor: Theme.of(context).colorScheme.primary,
         ),
       );
+
+      // ERROR: The error is that 'User' and 'FirebaseAuth' are undefined because you have not imported the necessary Firebase Auth package.
+      // To fix this, add the following import at the top of your file:
+      // import 'package:firebase_auth/firebase_auth.dart';
+      // Then, the code below will work:
+      //User? user = FirebaseAuth.instance.currentUser;
+      //print("User UID: ${user?.uid}");
       
       // Navigate to home screen
       Navigator.pushAndRemoveUntil(
