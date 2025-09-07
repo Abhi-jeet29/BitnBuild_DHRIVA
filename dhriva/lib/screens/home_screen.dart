@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/course.dart';
 import '../models/review.dart';
 import '../widgets/course_card.dart';
+import '../widgets/shorts_horizontal_section.dart';
+import '../widgets/study_buddy_fab.dart';
+import 'shorts_feed_screen.dart';
 
 // TODO: Replace with repository future provider
 final coursesProvider = Provider<List<Course>>((ref) {
@@ -19,6 +22,7 @@ class HomeScreen extends ConsumerWidget {
     
     return Scaffold(
       backgroundColor: Colors.grey[50],
+      floatingActionButton: const StudyBuddyFAB(),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -125,6 +129,15 @@ class HomeScreen extends ConsumerWidget {
               // Home - already here
               break;
             case 1:
+              // Shorts
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ShortsFeedScreen(),
+                ),
+              );
+              break;
+            case 2:
               // Wishlist
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -133,7 +146,7 @@ class HomeScreen extends ConsumerWidget {
                 ),
               );
               break;
-            case 2:
+            case 3:
               // My Learning
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -142,7 +155,7 @@ class HomeScreen extends ConsumerWidget {
                 ),
               );
               break;
-            case 3:
+            case 4:
               // Profile
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -157,6 +170,10 @@ class HomeScreen extends ConsumerWidget {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.video_library),
+            label: 'Shorts',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite_border),
@@ -256,6 +273,9 @@ class HomeScreen extends ConsumerWidget {
             ),
           ),
           
+          // Shorts Section
+          const ShortsHorizontalSection(),
+          
           // Featured Courses Section
           Padding(
             padding: const EdgeInsets.all(40),
@@ -305,23 +325,127 @@ class HomeScreen extends ConsumerWidget {
   }
 
   Widget _buildMobileLayout(List<Course> courses) {
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      itemCount: courses.length,
-      itemBuilder: (context, index) {
-        final course = courses[index];
-        return CourseCard(
-          course: course,
-          onWishlistToggle: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Added "${course.title}" to wishlist'),
-                duration: const Duration(seconds: 2),
+    return CustomScrollView(
+      slivers: [
+        // Hero Section for Mobile
+        SliverToBoxAdapter(
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  const Color(0xFF2563EB),
+                  const Color(0xFF1D4ED8),
+                ],
               ),
-            );
-          },
-        );
-      },
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Learn Without Limits',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  'Start, switch, or advance your career with more than 5,000 courses, Professional Certificates, and degrees from world-class universities and companies.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white70,
+                    height: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: const Color(0xFF2563EB),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        child: const Text('Join for Free'),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          side: const BorderSide(color: Colors.white),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        child: const Text('Try for Free'),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        
+        // Shorts Section
+        const SliverToBoxAdapter(
+          child: ShortsHorizontalSection(),
+        ),
+        
+        // Featured Courses Section
+        SliverPadding(
+          padding: const EdgeInsets.all(16),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                if (index == 0) {
+                  return const Padding(
+                    padding: EdgeInsets.only(bottom: 16),
+                    child: Text(
+                      'Featured Courses',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1E293B),
+                      ),
+                    ),
+                  );
+                }
+                
+                final course = courses[index - 1];
+                return CourseCard(
+                  course: course,
+                  onWishlistToggle: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Added "${course.title}" to wishlist'),
+                        duration: const Duration(seconds: 2),
+                      ),
+                    );
+                  },
+                );
+              },
+              childCount: courses.length + 1,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

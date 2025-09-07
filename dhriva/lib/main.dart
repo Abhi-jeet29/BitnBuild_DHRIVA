@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'screens/splash_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  try {
+    await Firebase.initializeApp();
+  } catch (e) {
+    // Handle Firebase initialization error gracefully
+    print('Firebase initialization error: $e');
+  }
+  
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -20,6 +31,14 @@ class MyApp extends StatelessWidget {
       title: 'Dhriva - Educational Platform',
       theme: _buildAppTheme(),
       home: const SplashScreen(),
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            textScaler: TextScaler.linear(1.0), // Prevent text scaling issues
+          ),
+          child: child!,
+        );
+      },
     );
   }
 }
@@ -45,6 +64,13 @@ ThemeData _buildAppTheme() {
       error: errorColor,
       onError: Colors.white,
       outline: Color(0xFFE2E8F0),
+    ),
+    // Performance optimizations
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      },
     ),
     textTheme: const TextTheme(
       headlineLarge: TextStyle(
