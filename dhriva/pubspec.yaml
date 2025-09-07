@@ -46,6 +46,9 @@ dependencies:
   # Video player dependencies
   video_player: ^2.9.2
   chewie: ^1.8.5
+  
+  # Image caching
+  cached_network_image: ^3.3.1
 
 dev_dependencies:
   flutter_test:

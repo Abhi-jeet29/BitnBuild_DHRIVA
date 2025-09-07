@@ -6,6 +6,7 @@ import '../widgets/course_card.dart';
 import '../widgets/shorts_horizontal_section.dart';
 import '../widgets/study_buddy_fab.dart';
 import 'shorts_feed_screen.dart';
+import 'my_learning_dashboard.dart';
 
 // TODO: Replace with repository future provider
 final coursesProvider = Provider<List<Course>>((ref) {
@@ -148,10 +149,10 @@ class HomeScreen extends ConsumerWidget {
               break;
             case 3:
               // My Learning
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('My Learning feature coming soon!'),
-                  duration: Duration(seconds: 2),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MyLearningDashboard(),
                 ),
               );
               break;

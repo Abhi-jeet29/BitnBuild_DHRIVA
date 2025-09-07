@@ -1,4 +1,5 @@
 import 'review.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Course {
   final String id;
@@ -30,6 +31,31 @@ class Course {
     required this.duration,
     required this.level,
   });
+
+  factory Course.fromMap(Map<String, dynamic> map, String id) {
+    return Course(
+      id: id,
+      title: map['title'] ?? '',
+      educatorName: map['educatorName'] ?? '',
+      price: (map['price'] ?? 0).toDouble(),
+      rating: (map['rating'] ?? 0).toDouble(),
+      thumbnailUrl: map['thumbnailUrl'] ?? '',
+      heroImageUrl: map['heroImageUrl'] ?? '',
+      description: map['description'] ?? '',
+      modules: List<String>.from(map['modules'] ?? []),
+      reviews: (map['reviews'] as List<dynamic>? ?? [])
+          .map((review) => Review.fromMap(review as Map<String, dynamic>))
+          .toList(),
+      startDate: map['startDate'] != null
+          ? (map['startDate'] as Timestamp).toDate()
+          : DateTime.now(),
+      duration: Duration(
+        hours: map['durationHours'] ?? 0,
+        minutes: map['durationMinutes'] ?? 0,
+      ),
+      level: map['level'] ?? 'Beginner',
+    );
+  }
 
   @override
   String toString() {
